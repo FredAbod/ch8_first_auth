@@ -14,10 +14,14 @@ const signUp = async (req, res) => {
       return res.status(400).json({ message: "User already exists" });
     }
     const hashedPassword = await bcrypt.hash(password, 10);
+    const otp = Math.floor(100000 + Math.random() * 900000).toString(); // Generate a 6-digit OTP
+    const otpExpiry = new Date(Date.now() + 10 * 60 * 1000); // OTP valid for 10 minutes
     const newUser = await User.create({
       firstName,
       lastName,
       email,
+      otp,
+      otpExpiry,
       password: hashedPassword,
     });
     // Do not return the password in the response
@@ -26,6 +30,7 @@ const signUp = async (req, res) => {
       firstName: newUser.firstName,
       lastName: newUser.lastName,
       email: newUser.email,
+      otp: newUser.otp
     };
     return res
       .status(201)
@@ -48,6 +53,10 @@ const signIn = async (req, res) => {
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(400).json({ message: "Invalid email or password" });
+    }
+
+    if(!user.isVerified) {
+      return res.status(400).json({ message: "Please verify your email before signing in" });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
@@ -109,9 +118,56 @@ const getAllUsers = async (req, res) => {
   }
 };
 
+const verifyEmail = async (req, res) => {
+  const { otp } = req.body;
+  try {
+    const user = await User.findOne({ otp });
+
+    if(!user) {
+      return res.status(400).json({ message: "Invalid OTP" });
+    }
+
+    if(user.otpExpiry < new Date()) {
+      return res.status(400).json({ message: "OTP has expired" });
+    }
+
+    user.isVerified = true;
+    user.otp = undefined;
+    user.otpExpiry = undefined;
+    await user.save();
+
+    return res.status(200).json({ message: "Email verified successfully" });
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+const resendOtp = async (req, res) => {
+  const { email } = req.body;
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    const otp = Math.floor(100000 + Math.random() * 900000).toString(); // Generate a new 6-digit OTP
+    const otpExpiry = new Date(Date.now() + 10 * 60 * 1000); // OTP valid for 10 minutes
+    user.otp = otp;
+    user.otpExpiry = otpExpiry;
+    await user.save();
+
+    return res.status(200).json({ message: "OTP resent successfully", otp });
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
 module.exports = {
   signUp,
   signIn,
   makeAdmin,
+  resendOtp,
+  verifyEmail,
   getAllUsers,
 };

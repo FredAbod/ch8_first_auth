@@ -1,6 +1,7 @@
 const User = require("../models/user.models");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const { sendEmail } = require("../utils/email");
 
 const signUp = async (req, res) => {
   const { firstName, lastName, email, password } = req.body;
@@ -24,14 +25,20 @@ const signUp = async (req, res) => {
       otpExpiry,
       password: hashedPassword,
     });
+
+    await sendEmail(
+      email,
+      "Email Verification",
+      `Your OTP for email verification is: ${otp}. It is valid for 10 minutes.`,
+    );
+
     // Do not return the password in the response
     const userResponse = {
       id: newUser._id,
       firstName: newUser.firstName,
       lastName: newUser.lastName,
       email: newUser.email,
-      otp: newUser.otp
-    };
+        };
     return res
       .status(201)
       .json({ message: "User created successfully", user: userResponse });
@@ -55,8 +62,10 @@ const signIn = async (req, res) => {
       return res.status(400).json({ message: "Invalid email or password" });
     }
 
-    if(!user.isVerified) {
-      return res.status(400).json({ message: "Please verify your email before signing in" });
+    if (!user.isVerified) {
+      return res
+        .status(400)
+        .json({ message: "Please verify your email before signing in" });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
@@ -107,7 +116,9 @@ const makeAdmin = async (req, res) => {
 
 const getAllUsers = async (req, res) => {
   if (req.user.role !== "admin") {
-    return res.status(403).json({ message: "You're not authorized to perform this action" });
+    return res
+      .status(403)
+      .json({ message: "You're not authorized to perform this action" });
   }
   try {
     const users = await User.find().select("-password");
@@ -123,11 +134,11 @@ const verifyEmail = async (req, res) => {
   try {
     const user = await User.findOne({ otp });
 
-    if(!user) {
+    if (!user) {
       return res.status(400).json({ message: "Invalid OTP" });
     }
 
-    if(user.otpExpiry < new Date()) {
+    if (user.otpExpiry < new Date()) {
       return res.status(400).json({ message: "OTP has expired" });
     }
 

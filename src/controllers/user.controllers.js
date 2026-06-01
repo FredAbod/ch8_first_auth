@@ -1,7 +1,7 @@
 const User = require("../models/user.models");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { sendEmail } = require("../utils/email");
+const { sendEmail, sendTemplateEmail } = require("../utils/email");
 
 const signUp = async (req, res) => {
   const { firstName, lastName, email, password } = req.body;
@@ -26,10 +26,12 @@ const signUp = async (req, res) => {
       password: hashedPassword,
     });
 
-    await sendEmail(
+    // Fire and forget email
+    sendTemplateEmail(
       email,
       "Email Verification",
-      `Your OTP for email verification is: ${otp}. It is valid for 10 minutes.`,
+      "signup",
+      { firstName, lastName, otp }
     );
 
     // Do not return the password in the response
@@ -107,6 +109,15 @@ const makeAdmin = async (req, res) => {
     }
     user.role = "admin";
     await user.save();
+    
+    // Fire and forget email
+    sendTemplateEmail(
+      user.email,
+      "You've Been Promoted to Admin",
+      "makeadmin",
+      { firstName: user.firstName, lastName: user.lastName }
+    );
+    
     return res.status(200).json({ message: "User role updated to admin" });
   } catch (e) {
     console.log(e);
@@ -147,6 +158,14 @@ const verifyEmail = async (req, res) => {
     user.otpExpiry = undefined;
     await user.save();
 
+    // Fire and forget email
+    sendTemplateEmail(
+      user.email,
+      "Email Verified Successfully",
+      "verify-email",
+      { firstName: user.firstName }
+    );
+
     return res.status(200).json({ message: "Email verified successfully" });
   } catch (e) {
     console.log(e);
@@ -166,6 +185,14 @@ const resendOtp = async (req, res) => {
     user.otp = otp;
     user.otpExpiry = otpExpiry;
     await user.save();
+
+    // Fire and forget email
+    sendTemplateEmail(
+      user.email,
+      "Your New Verification Code",
+      "resend-otp",
+      { firstName: user.firstName, lastName: user.lastName, otp }
+    );
 
     return res.status(200).json({ message: "OTP resent successfully", otp });
   } catch (e) {

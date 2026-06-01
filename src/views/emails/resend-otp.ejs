@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+        .content {
+            padding: 30px;
+        }
+        .greeting {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .otp-section {
+            background-color: #fffbf0;
+            padding: 20px;
+            border-radius: 6px;
+            border-left: 4px solid #f39c12;
+            margin: 20px 0;
+        }
+        .otp-code {
+            font-size: 32px;
+            font-weight: bold;
+            color: #f39c12;
+            text-align: center;
+            letter-spacing: 5px;
+            margin: 15px 0;
+        }
+        .otp-info {
+            color: #666;
+            font-size: 14px;
+            text-align: center;
+        }
+        .message {
+            color: #333;
+            line-height: 1.6;
+            margin: 15px 0;
+        }
+        .warning {
+            background-color: #fff3cd;
+            padding: 15px;
+            border-radius: 6px;
+            border-left: 4px solid #f39c12;
+            color: #856404;
+            margin: 20px 0;
+            font-size: 14px;
+        }
+        .footer {
+            background-color: #f4f4f4;
+            padding: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Your New Verification Code</h1>
+        </div>
+        <div class="content">
+            <div class="greeting">
+                Hi <strong><%= firstName %> <%= lastName %></strong>,
+            </div>
+            <div class="message">
+                We received a request to resend your email verification code. Here's your new OTP:
+            </div>
+            <div class="otp-section">
+                <div style="color: #666; margin-bottom: 10px;">Your New Verification Code:</div>
+                <div class="otp-code"><%= otp %></div>
+                <div class="otp-info">
+                    This code is valid for <strong>10 minutes</strong>. Do not share this code with anyone.
+                </div>
+            </div>
+            <div class="message">
+                If you didn't request this code, please ignore this email. Your previous code is no longer valid.
+            </div>
+            <div class="warning">
+                <strong>⚠ Security Notice:</strong> Never share your OTP with anyone. We will never ask for this code via email or message.
+            </div>
+        </div>
+        <div class="footer">
+            <p>&copy; 2026 Our Platform. All rights reserved.</p>
+            <p>This is an automated email. Please do not reply to this message.</p>
+        </div>
+    </div>
+</body>
+</html>

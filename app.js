@@ -9,6 +9,7 @@ const userRoutes = require("./src/routes/user.routes");
 
 // middlewares
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev"));
 
 const port = process.env.PORT || 3000;

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #26c281 0%, #1abc9c 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+        .content {
+            padding: 30px;
+        }
+        .success-message {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        .checkmark {
+            display: inline-block;
+            width: 60px;
+            height: 60px;
+            background-color: #26c281;
+            border-radius: 50%;
+            color: white;
+            font-size: 40px;
+            text-align: center;
+            line-height: 60px;
+            margin-right: 15px;
+        }
+        .success-text {
+            font-size: 20px;
+            color: #26c281;
+            font-weight: bold;
+        }
+        .message {
+            color: #333;
+            line-height: 1.6;
+            margin: 20px 0;
+            font-size: 16px;
+        }
+        .next-steps {
+            background-color: #f0f8f5;
+            padding: 20px;
+            border-radius: 6px;
+            border-left: 4px solid #26c281;
+            margin: 20px 0;
+        }
+        .next-steps h3 {
+            color: #26c281;
+            margin-top: 0;
+        }
+        .next-steps ul {
+            margin: 10px 0;
+            padding-left: 20px;
+            color: #333;
+        }
+        .next-steps li {
+            margin: 8px 0;
+        }
+        .footer {
+            background-color: #f4f4f4;
+            padding: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Email Verified Successfully</h1>
+        </div>
+        <div class="content">
+            <div class="success-message">
+                <div class="checkmark">✓</div>
+                <div class="success-text">Email Verified!</div>
+            </div>
+            <div class="message">
+                Hi <strong><%= firstName %></strong>,
+            </div>
+            <div class="message">
+                Congratulations! Your email address has been verified successfully. Your account is now fully activated and ready to use.
+            </div>
+            <div class="next-steps">
+                <h3>What's Next?</h3>
+                <ul>
+                    <li>Log in to your account</li>
+                    <li>Complete your profile information</li>
+                    <li>Start exploring our platform</li>
+                </ul>
+            </div>
+            <div class="message">
+                If you have any questions or need assistance, feel free to contact our support team.
+            </div>
+        </div>
+        <div class="footer">
+            <p>&copy; 2026 Our Platform. All rights reserved.</p>
+            <p>This is an automated email. Please do not reply to this message.</p>
+        </div>
+    </div>
+</body>
+</html>

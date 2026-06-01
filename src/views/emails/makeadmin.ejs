@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #8e44ad 0%, #3498db 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+        .content {
+            padding: 30px;
+        }
+        .greeting {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .promotion-box {
+            background: linear-gradient(135deg, #8e44ad 0%, #3498db 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 6px;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .promotion-box h2 {
+            margin: 0 0 10px 0;
+            font-size: 24px;
+        }
+        .promotion-icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+        .message {
+            color: #333;
+            line-height: 1.6;
+            margin: 15px 0;
+            font-size: 16px;
+        }
+        .permissions-section {
+            background-color: #f5f5f5;
+            padding: 20px;
+            border-radius: 6px;
+            border-left: 4px solid #8e44ad;
+            margin: 20px 0;
+        }
+        .permissions-section h3 {
+            color: #8e44ad;
+            margin-top: 0;
+        }
+        .permissions-list {
+            list-style: none;
+            padding: 0;
+            margin: 10px 0;
+        }
+        .permissions-list li {
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+            color: #333;
+        }
+        .permissions-list li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #8e44ad;
+            font-weight: bold;
+        }
+        .footer {
+            background-color: #f4f4f4;
+            padding: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>You've Been Promoted to Admin</h1>
+        </div>
+        <div class="content">
+            <div class="greeting">
+                Hi <strong><%= firstName %> <%= lastName %></strong>,
+            </div>
+            <div class="promotion-box">
+                <div class="promotion-icon">👑</div>
+                <h2>Congratulations!</h2>
+                <p style="margin: 0; font-size: 16px;">You have been promoted to Administrator</p>
+            </div>
+            <div class="message">
+                We're thrilled to inform you that you have been elevated to an Administrator role on our platform. This is a recognition of your contributions and dedication to our community.
+            </div>
+            <div class="permissions-section">
+                <h3>Admin Privileges Include:</h3>
+                <ul class="permissions-list">
+                    <li>User management and moderation</li>
+                    <li>Platform settings and configuration</li>
+                    <li>Content and activity monitoring</li>
+                    <li>Report and incident management</li>
+                    <li>Analytics and reporting access</li>
+                    <li>System administration capabilities</li>
+                </ul>
+            </div>
+            <div class="message">
+                Please log in to your account to access the admin dashboard and explore your new capabilities. If you have any questions about your new role or need assistance, don't hesitate to reach out to our support team.
+            </div>
+            <div class="message">
+                <strong>Important:</strong> Please keep your admin credentials secure and follow all platform policies and guidelines in your new role.
+            </div>
+        </div>
+        <div class="footer">
+            <p>&copy; 2026 Our Platform. All rights reserved.</p>
+            <p>This is an automated email. Please do not reply to this message.</p>
+        </div>
+    </div>
+</body>
+</html>

@@ -16,6 +16,11 @@ const walletSchema = new mongoose.Schema(
             type: mongoose.Schema.Types.Decimal128,
             required: true,
             default: 0
+        },
+        currency: {
+            type: String,
+            required: true,
+            default: "NGN"
         }
     },
     { timestamps: true, versionKey: false },

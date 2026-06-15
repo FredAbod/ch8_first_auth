@@ -2,6 +2,7 @@ const User = require("../models/user.models");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { sendEmail, sendTemplateEmail } = require("../utils/email");
+const { uploadToCloudinary, deleteFromCloudinary } = require("../utils/cloudinary");
 
 const signUp = async (req, res) => {
   const { firstName, lastName, email, password } = req.body;
@@ -201,6 +202,55 @@ const resendOtp = async (req, res) => {
   }
 };
 
+const editProfile = async (req, res) => {
+  const { id } = req.user;
+  const { firstName, lastName, bio } = req.body;
+
+  try {
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Update profile fields
+    if (firstName) user.firstName = firstName;
+    if (lastName) user.lastName = lastName;
+    if (bio) user.bio = bio;
+
+    // Handle profile picture upload
+    if (req.file) {
+      // Delete old profile picture from Cloudinary
+      if (user.profilePicture) {
+        const publicId = user.profilePicture.split("/").pop().split(".")[0];
+        await deleteFromCloudinary(`demo/${publicId}`);
+      }
+
+      // Upload new profile picture
+      const fileName = `${id}-${Date.now()}`;
+      const uploadResult = await uploadToCloudinary(req.file.buffer, fileName);
+      user.profilePicture = uploadResult.secure_url;
+    }
+
+    await user.save();
+
+    const userResponse = {
+      id: user._id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      bio: user.bio,
+      profilePicture: user.profilePicture,
+    };
+
+    return res
+      .status(200)
+      .json({ message: "Profile updated successfully", user: userResponse });
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
 module.exports = {
   signUp,
   signIn,
@@ -208,4 +258,5 @@ module.exports = {
   resendOtp,
   verifyEmail,
   getAllUsers,
+  editProfile,
 };

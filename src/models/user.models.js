@@ -29,13 +29,19 @@ const userSchema = new mongoose.Schema(
     },
     isVerified: {
       type: Boolean,
-      default: false,
+      default: false, 
     }, 
     otp: {
       type: String
     },
     otpExpiry: {
       type: Date
+    },
+    profilePicture: {
+      type: String
+    },
+    bio: {
+      type: String
     }
   },
   { timestamps: true, versionKey: false },

@@ -84,18 +84,20 @@ const handleWebhook = async (req, res) => {
   session.startTransaction();
 
   try {
-    // Verify webhook signature
-    const hash = crypto
-      .createHmac("sha256", process.env.FLUTTERWAVE_SECRET_HASH)
-      .update(JSON.stringify(req.body))
+    const secretHash = process.env.FLUTTERWAVE_SECRET_HASH;
+    const signature =
+      req.headers["flutterwave-signature"] || req.headers["verif-hash"];
+
+    const rawBody = req.rawBody?.toString() || JSON.stringify(req.body);
+    const hmacHash = crypto
+      .createHmac("sha256", secretHash)
+      .update(rawBody)
       .digest("base64");
-      // .digest("hex");
 
-      console.log(process.env.FLUTTERWAVE_SECRET_HASH);
-      console.log(hash);
-      console.log(req.headers["verif-hash"]);
+    const isValid =
+      signature === secretHash || signature === hmacHash;
 
-    if (hash !== req.headers["verif-hash"]) {
+    if (!signature || !isValid) {
       await session.abortTransaction();
       return res.status(401).json({ message: "Unauthorized webhook" });
     }

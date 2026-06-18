@@ -5,12 +5,12 @@ const transactionSchema = new mongoose.Schema(
         senderWalletId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Wallet",
-            required: true,
+            // required: true,
         },
         receiverWalletId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Wallet",
-            required: true,
+            // required: true,
         },
         amount: {
             type: mongoose.Schema.Types.Decimal128,
@@ -18,11 +18,11 @@ const transactionSchema = new mongoose.Schema(
         },
         balanceBefore: {
             type: mongoose.Schema.Types.Decimal128,
-            required: true,
+            // required: true,
         },
         balanceAfter: {
             type: mongoose.Schema.Types.Decimal128,
-            required: true,
+            // required: true,
         },
         trxReference: {
             type: String,
@@ -38,6 +38,10 @@ const transactionSchema = new mongoose.Schema(
             type: String,
             enum: ["debit", "credit"],
             required: true,
+        },
+        providerTrxId: {
+            type: String,
+            // This can store the transaction ID from the payment provider (e.g., Flutterwave)
         },
     },
     { timestamps: true, versionKey: false },

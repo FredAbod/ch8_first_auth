@@ -6,6 +6,7 @@ const app = express();
 const connectDb = require("./src/config/db");
 const userRoutes = require("./src/routes/user.routes");
 const walletRoutes = require("./src/routes/wallet.routes");
+const paymentRoutes = require("./src/routes/payment.routes");
 
 
 // middlewares
@@ -22,6 +23,7 @@ app.get("/", (req, res) => {
 // routes
 app.use("/api/users", userRoutes);
 app.use("/api/wallets", walletRoutes);
+app.use("/api/payments", paymentRoutes);
 
 app.listen(port, () => {
     connectDb();

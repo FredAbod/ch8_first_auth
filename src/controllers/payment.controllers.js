@@ -88,7 +88,8 @@ const handleWebhook = async (req, res) => {
     const hash = crypto
       .createHmac("sha256", process.env.FLUTTERWAVE_SECRET_HASH)
       .update(JSON.stringify(req.body))
-      .digest("hex");
+      .digest("base64");
+      // .digest("hex");
 
       console.log(process.env.FLUTTERWAVE_SECRET_HASH);
       console.log(hash);

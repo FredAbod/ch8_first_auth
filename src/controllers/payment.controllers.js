@@ -86,9 +86,12 @@ const handleWebhook = async (req, res) => {
   try {
     // Verify webhook signature
     const hash = crypto
-      .createHmac("sha256", process.env.FLUTTERWAVE_SECRET_HASH || "")
+      .createHmac("sha256", process.env.FLUTTERWAVE_SECRET_HASH)
       .update(JSON.stringify(req.body))
       .digest("hex");
+
+      console.log(process.env.FLUTTERWAVE_SECRET_HASH);
+      console.log(hash);
 
     if (hash !== req.headers["verif-hash"]) {
       await session.abortTransaction();
@@ -97,6 +100,8 @@ const handleWebhook = async (req, res) => {
 
     const { event, data } = req.body;
 
+    console.log(event)
+    console.log(data)
     if (event !== "charge.completed") {
       await session.abortTransaction();
       return res.status(200).json({ message: "Event not processed" });

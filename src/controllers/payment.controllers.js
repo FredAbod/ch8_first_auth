@@ -92,6 +92,7 @@ const handleWebhook = async (req, res) => {
 
       console.log(process.env.FLUTTERWAVE_SECRET_HASH);
       console.log(hash);
+      console.log(req.headers["verif-hash"]);
 
     if (hash !== req.headers["verif-hash"]) {
       await session.abortTransaction();

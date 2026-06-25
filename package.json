@@ -1,11 +1,12 @@
 {
   "name": "ch8_first_auth",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Production-ready fintech backend with wallet, auth, and payments",
+  "type": "module",
+  "main": "src/server.js",
   "scripts": {
-    "dev": "nodemon app.js",
-    "start": "node app.js"
+    "dev": "nodemon src/server.js",
+    "start": "node src/server.js"
   },
   "keywords": [],
   "author": "",
@@ -14,14 +15,27 @@
     "axios": "^1.18.0",
     "bcryptjs": "^3.0.3",
     "cloudinary": "^2.10.0",
+    "compression": "^1.8.1",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "ejs": "^6.0.1",
     "express": "^5.2.1",
+    "express-mongo-sanitize": "^2.2.0",
+    "express-rate-limit": "^8.5.2",
     "flutterwave-node-v3": "^1.4.1",
+    "helmet": "^8.2.0",
+    "hpp": "^0.2.3",
+    "ioredis": "^5.11.1",
+    "joi": "^18.2.3",
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.6.2",
     "morgan": "^1.10.1",
     "multer": "^2.2.0",
-    "nodemailer": "^8.0.8"
+    "nodemailer": "^8.0.8",
+    "xss-clean": "^0.1.4"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
   }
 }

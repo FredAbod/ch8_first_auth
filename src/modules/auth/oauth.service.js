@@ -27,6 +27,10 @@ const linkGoogleToUser = async (user, profile) => {
   return updateUserById(user._id, {
     googleId: profile.googleId,
     isVerified: true,
+    authProvider:
+      user.authProvider === AuthProvider.GOOGLE
+        ? AuthProvider.GOOGLE
+        : AuthProvider.HYBRID,
     ...(profile.profilePicture && !user.profilePicture
       ? { profilePicture: profile.profilePicture }
       : {}),

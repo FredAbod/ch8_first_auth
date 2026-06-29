@@ -8,6 +8,7 @@ import { handleGoogleOAuthCallback } from "./oauth.service.js";
 
 const OAUTH_STATE_COOKIE = "google_oauth_state";
 const OAUTH_STATE_MAX_AGE_MS = 10 * 60 * 1000;
+const FALLBACK_SUCCESS_REDIRECT = "http://localhost:3000";
 
 const cookieOptions = {
   httpOnly: true,
@@ -17,12 +18,20 @@ const cookieOptions = {
 };
 
 const buildRedirectUrl = (params) => {
-  const url = new URL(getGoogleSuccessRedirect());
+  let url;
+
+  try {
+    url = new URL(getGoogleSuccessRedirect());
+  } catch {
+    url = new URL(FALLBACK_SUCCESS_REDIRECT);
+  }
+
   Object.entries(params).forEach(([key, value]) => {
     if (value !== undefined && value !== null) {
       url.searchParams.set(key, String(value));
     }
   });
+
   return url.toString();
 };
 
@@ -32,7 +41,7 @@ export const googleAuth = asyncHandler(async (req, res) => {
   return res.redirect(url);
 });
 
-export const googleRedirect = async (req, res) => {
+export const googleRedirect = asyncHandler(async (req, res) => {
   const fail = (message) =>
     res.redirect(
       buildRedirectUrl({
@@ -41,23 +50,23 @@ export const googleRedirect = async (req, res) => {
       }),
     );
 
-  if (req.query.error) {
-    return fail(req.query.error_description || req.query.error);
-  }
-
-  const { code, state } = req.query;
-
-  if (!code) {
-    return fail("Missing authorization code");
-  }
-
-  if (!state || state !== req.cookies?.[OAUTH_STATE_COOKIE]) {
-    return fail("Invalid OAuth state");
-  }
-
-  res.clearCookie(OAUTH_STATE_COOKIE);
-
   try {
+    if (req.query.error) {
+      return fail(req.query.error_description || req.query.error);
+    }
+
+    const { code, state } = req.query;
+
+    if (!code) {
+      return fail("Missing authorization code");
+    }
+
+    if (!state || state !== req.cookies?.[OAUTH_STATE_COOKIE]) {
+      return fail("Invalid OAuth state");
+    }
+
+    res.clearCookie(OAUTH_STATE_COOKIE);
+
     const result = await handleGoogleOAuthCallback(code);
 
     return res.redirect(
@@ -71,4 +80,4 @@ export const googleRedirect = async (req, res) => {
   } catch (error) {
     return fail(error.message || "Google authentication failed");
   }
-};
+});

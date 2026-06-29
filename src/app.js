@@ -4,6 +4,7 @@ import applySecurityMiddleware from "./shared/middlewares/security.middleware.js
 import notFoundMiddleware from "./shared/middlewares/notFound.middleware.js";
 import errorMiddleware from "./shared/middlewares/error.middleware.js";
 import userRoutes from "./modules/user/user.routes.js";
+import authRoutes from "./modules/auth/auth.routes.js";
 import walletRoutes from "./modules/wallet/wallet.routes.js";
 import paymentRoutes from "./modules/payment/payment.routes.js";
 import { sendSuccess } from "./shared/helpers/response.helper.js";
@@ -27,6 +28,7 @@ app.get("/", (req, res) =>
 );
 
 app.use("/api/users", userRoutes);
+app.use("/api/auth", authRoutes);
 app.use("/api/wallets", walletRoutes);
 app.use("/api/payments", paymentRoutes);
 

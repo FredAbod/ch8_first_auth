@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { AuthProvider } from "../../shared/enums/authProvider.enum.js";
 
 const userSchema = new mongoose.Schema(
   {
@@ -25,8 +26,17 @@ const userSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      required: true,
       select: false,
+    },
+    googleId: {
+      type: String,
+      unique: true,
+      sparse: true,
+    },
+    authProvider: {
+      type: String,
+      enum: Object.values(AuthProvider),
+      default: AuthProvider.LOCAL,
     },
     role: {
       type: String,
@@ -59,8 +69,9 @@ const userSchema = new mongoose.Schema(
   { timestamps: true, versionKey: false },
 );
 
-userSchema.index({ email: 1 });
 userSchema.index({ deletedAt: 1 });
+userSchema.index({ email: 1, deletedAt: 1 });
+userSchema.index({ googleId: 1 }, { sparse: true });
 
 const User = mongoose.model("User", userSchema);
 

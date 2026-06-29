@@ -36,7 +36,6 @@ const walletSchema = new mongoose.Schema(
 );
 
 walletSchema.index({ userId: 1, currency: 1 }, { unique: true });
-walletSchema.index({ accountNumber: 1 });
 walletSchema.index({ status: 1 });
 
 const Wallet = mongoose.model("Wallet", walletSchema);

@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs";
 import { AppError } from "../../shared/errors/AppError.js";
-import { UserRole } from "../../shared/enums/userRole.enum.js";
+import { AuthProvider } from "../../shared/enums/authProvider.enum.js";
 import { cacheDel, cacheGet, cacheSet } from "../../cache/cache.service.js";
 import {
   createUser,
@@ -21,22 +21,12 @@ import {
   deleteFromCloudinary,
   uploadToCloudinary,
 } from "../upload/upload.service.js";
+import { toPublicUser } from "./user.dto.js";
+import { UserRole } from "../../shared/enums/userRole.enum.js";
 
 const USER_PROFILE_CACHE_TTL = 300;
 const userProfileCacheKey = (userId) => `user:profile:${userId}`;
 const usersListCacheKey = "users:list";
-
-const toPublicUser = (user) => ({
-  id: user._id,
-  firstName: user.firstName,
-  lastName: user.lastName,
-  email: user.email,
-  role: user.role,
-  isVerified: user.isVerified,
-  phoneNumber: user.phoneNumber,
-  bio: user.bio,
-  profilePicture: user.profilePicture,
-});
 
 const generateOtp = () =>
   Math.floor(100000 + Math.random() * 900000).toString();
@@ -58,6 +48,7 @@ export const signUp = async ({ firstName, lastName, email, password }) => {
     otp,
     otpExpiry,
     password: hashedPassword,
+    authProvider: AuthProvider.LOCAL,
   });
 
   sendTemplateEmail(email, "Email Verification", "signup", {
@@ -72,6 +63,14 @@ export const signUp = async ({ firstName, lastName, email, password }) => {
 export const signIn = async ({ email, password }) => {
   const user = await findUserByEmail(email, true);
   if (!user) {
+    throw new AppError("Invalid email or password", 400, "INVALID_CREDENTIALS");
+  }
+
+  if (user.authProvider === AuthProvider.GOOGLE) {
+    throw new AppError("Please sign in with Google", 400, "USE_GOOGLE_SIGNIN");
+  }
+
+  if (!user.password) {
     throw new AppError("Invalid email or password", 400, "INVALID_CREDENTIALS");
   }
 

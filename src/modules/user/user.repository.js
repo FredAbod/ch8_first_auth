@@ -1,5 +1,8 @@
 import User from "./user.schema.js";
 
+export const findUserByGoogleId = (googleId) =>
+  User.findOne({ googleId, deletedAt: null });
+
 export const findUserByEmail = (email, includeSecrets = false) => {
   let query = User.findOne({ email, deletedAt: null });
   if (includeSecrets) {

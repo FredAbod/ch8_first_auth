@@ -5,11 +5,19 @@ const DEFAULT_TTL_SECONDS = 300;
 
 export const cacheGet = async (key) => {
   const client = getRedisClient();
-  if (!client) return null;
+  if (!client) {
+    logger.debug("Cache miss", { key, redis: false });
+    return null;
+  }
 
   try {
     const value = await client.get(key);
-    return value ? JSON.parse(value) : null;
+    if (value) {
+      logger.debug("Cache hit", { key });
+      return JSON.parse(value);
+    }
+    logger.debug("Cache miss", { key });
+    return null;
   } catch (error) {
     logger.warn("Cache get failed", { key, error: error.message });
     return null;
